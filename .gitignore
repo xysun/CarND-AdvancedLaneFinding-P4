@@ -1,4 +1,6 @@
 *.mp4
 project_video_10s/
 project_video_output_10s/
+project_video_4s/
+project_video_output_4s/
 *.swp
