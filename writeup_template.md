@@ -18,11 +18,11 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[image1]: ./output_images/undistort_example.png "Undistorted"
+[image2]: ./output_images/input_1.jpg "Original road image"
+[image3]: ./output_images/input_1_undistorted.jpg "Original road image - undistorted"
+[image4]: ./output_images/input_1_color_threshold.jpg "Color threshold example"
+[image5]: ./output_images/input_1_regional_mask.jpg "Regional mask example"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 
@@ -39,7 +39,7 @@ You're reading it!
 
 ####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the second code cell of the IPython notebook located in "P4 Pipeline.ipynb".  
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
@@ -47,15 +47,36 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ![alt text][image1]
 
+Since we only need to calibrate camera once, the calibration results (camera matrix `mtx` and distortion coefficients `distort`) are saved as pickle, so that in the future we only need to reload from pickle files.
+
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+To demonstrate this step, I will describe how I apply the distortion correction to one of the road images from project video like this one:
 ![alt text][image2]
-####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
 
+The code for undistort can be found in code cell #4 in iPython notebook "P4 Pipeline": applying camera matrix and distort coefficients obtained from camera calibration step in the function `cv2.undistort(test_img, mtx, dist, None, mtx)`.
+
+Here's the output image, you can see it is slightly "stretched" after the distortion-correction step.
 ![alt text][image3]
+
+####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+To obtain a thresholded binary image, I used only color thresholding, but with two different spaces: R from RGB and U from [LUV](https://en.wikipedia.org/wiki/CIELUV). In particular, I found LUV is more robust for shadow areas than HSV.
+
+The code for color thresholding can be found in cell #5 in "P4 Pipeline" notebook. The threshold I used are:
+- R: (220, 255)
+- U: (120, 255)
+
+
+Here's an exmple of output for the same road image as above for this step:
+
+![alt text][image4]
+
+After color threshold, I also applied a regional mask to exclude irrelevant portions of the image. I used same code from Project 1. The code is in cell #6 in "P4 Pipeline" notebook.
+
+Here's an example of output after regional map:
+
+![alt text][image5]
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
