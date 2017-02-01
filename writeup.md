@@ -68,6 +68,7 @@ Here's the output image, you can see it is slightly "stretched" after the distor
 To obtain a thresholded binary image, I used only color thresholding, but with two different spaces: R from RGB and U from [LUV](https://en.wikipedia.org/wiki/CIELUV). In particular, I found LUV is more robust for shadow areas than HSV.
 
 The code for color thresholding can be found in cell #5 in "P4 Pipeline" notebook. The threshold I used are:
+
 - R: (220, 255)
 - U: (120, 255)
 
@@ -123,6 +124,7 @@ After fitting the first image, we can base subsequent searches from the previous
 The code for this search can be found in function `histogram_search_next()` in cell #14.
 
 In `Lane.get_fit()` function, a polynomial fit is only deemed as a "good fit" if it is: 
+
 - left and right lanes are parallel, i.e the highest coefficient is of same sign
 - curvature is more than 200m. This is to filter out cases where too few pixel points result in a drastic polynomial fit. 
 
@@ -130,7 +132,7 @@ In `Lane.get_fit()` function, a polynomial fit is only deemed as a "good fit" if
 
 I calculated lane curvature through function `get_curvature()`. This is following same approach as in [lecture](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/2b62a1c3-e151-4a0e-b6b6-e424fa46ceab/lessons/40ec78ee-fb7c-4b53-94a8-028c5c60b858/concepts/2f928913-21f6-4611-9055-01744acc344f) and transformed from pixel space to world meter space.
 
-For vehicle position, code is in function `get_off_center()`. I take the bottom pixels of left and right lane, transform them back using the perspective matrix, and compare the middle point of the transformed pixels with screen's mid point. 
+For vehicle position, code is in function `get_off_center()`. I take the bottom pixels of fitted left and right polynomial, transform them back using the perspective matrix, and compare the middle point of the transformed pixels with screen's mid point. 
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
