@@ -160,3 +160,34 @@ Here's a [link to my video result](./project_video_output.mp4)
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
+- Approach
+
+	I approached the problem by first trying out invididual processing stages on a single image. Once the pipeline is working for one single frame, I began to apply it to video clips, identify the problem frames, and "debug" the problems. 
+	
+	One technique I found very useful is when producing the output videoclip, always save 2 images: one original and one processed. And once I saw any problem frames in the output video, I can go back to the saved images and start debugging on single frame.
+
+- Where will the pipeline likely fail
+
+	The current pipeline does not work well on "challenge_video", mainly because the road segment has two distinct colors - half dark gray half bright gray. 
+	
+	This means the pipeline will mostly fail when the road segment is not monotonous in color. 
+	
+	It doesn't work well on "harder\_challenge\_video" either. Mainly because in this video the environment is very rich with greenish trees and yellowish grass, which the pipeline confuses with the yellow lanes. This means the current pipeline is not very robust on color thresholding. 
+
+- Areas of further improvement
+
+	There're a few things I'd like to try out if I have room to work on this project further: 
+	
+	1. Explore gradient threshold
+	
+		I tried a few gradient threshold, `sobel_x` and `sobel_y`, but they didn't work particularly well. In the end I opted for only color thresholding. I'd like to explore and understand more on gradient threshold. This may help with cases like challenge_video.
+	
+	2. Try a deep learning approach.
+	
+		This is mainly inspired by [this post on confluence](https://carnd-forums.udacity.com/questions/33788268/an-experiment-using-deeplearning-for-advanced-lane-finding). It would be interesting to try out using CNN to identify the lanes. 
+
+
+
+
+
+
